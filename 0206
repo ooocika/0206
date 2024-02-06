@@ -1,0 +1,613 @@
+public class MyWebSocketHandler implements WebSocketHandler {
+
+  @Override
+  public Mono<Void> handle(WebSocketSession session) {
+
+  }
+}
+
+//
+@Configuration
+class WebConfig {
+
+  @Bean
+  public HandlerMapping handlerMapping() {
+
+    Map<String, WebSocketHandler> map = new HashMap<>();
+    map.put("/path", new MyWebSocketHandler());
+    int order = -1;
+
+    return new SimpleUrlHandlerMapping(map, order);
+  }
+}
+
+//
+@Configuration
+class WebConfig {
+
+  @Bean
+
+  public WebSocketHandlerAdapter handlerAdapter() {
+    return new WebSocketHandlerAdapter();
+  }
+}
+
+//
+class ExampleHandler implements WebSocketHandler {
+
+  @Override
+  public Mono<Void> handle(WebSocketSession session) {
+    return session.receive()
+        .doOnNext(message -> {
+
+        })
+        .concatMap(message -> {
+
+        })
+        .then();
+  }
+}
+
+//
+class ExampleHandler implements WebSocketHandler {
+
+  @Override
+  public Mono<Void> handle(WebSocketSession session){
+
+    Flux<WebSocketMessage> output = session.receive()
+      {
+      .doOnNext(message ->{
+        
+      
+      })
+  .concatMap(message ->{
+    
+  })
+      .map(value -> session.textMessage("Echo" + value));
+  return session.send(output);
+  }
+}
+
+  //
+  class ExampleHandler implements WebSocketHandler {
+
+  @Override
+  public Mono<Void> handle(WebSocketSession session){
+
+    Mono<Void> input = session.receive()
+      .doNext(message ->{
+        
+      })
+      .concatMap(message ->{
+        
+      })
+      .then();
+
+    Flux<String> source = ...;
+    Mono<Void> output = session.send(source.map(session::textMessage));
+   
+  return Mono.zip(input, output).then();
+  }
+  }
+
+  //
+  @Configuration
+  class WebConfig {
+
+    @Bean
+    public WebSocketHandlerAdapter handlerAdapter() {
+      return new WebSocketHandlerAdapter(webSocketService());
+
+    }
+
+    @Bean
+    public WebSocketService webSocketService() {
+      TomcatRequestUpgradeStragegy strategy = new TomcatRequestUpgradeStragegy();
+      stragegy.setMaxSessionIdeTimeout(0L);
+      return new HandshakeWebSocketService(strategy);
+    }
+  }
+
+  //
+  WebSocketClient client = new ReactorNettyWebSocketClient();
+
+  URI url = new URI(
+      "ws://localhost:8080/path");client.execute(url,session->session.receive().doOnNext(System.out::println).then());
+  //
+RSocketrequester requester = RSocketRequester.builder().tcp("localhost", 7000");
+
+  URI url = URI.create("http://example.org:8080/path");
+  RSocketRequester requester = RSocketRequester.builder().webSocket(url);
+  //
+
+RSocketStragies strategies = RSocketStragies.builder()
+  .encoder(encoder -> encoders.add(new Jackson2CborEncoder()))
+  .decoders(decodes -> decoders.add(new Jackson2CborDecoder()))
+  .build();
+
+  RSocketRequester requester = RSocketRequester.builder()
+      .rsocketStragies(strategies)
+      .tcp("localhost", 7000);
+  //
+ApplicationContext context = ...;
+RSocketMessageHandler handler = context.getBean(RSocketMessageHandler.class);
+
+RSocketRequester requester = RSocketRequester.builder()
+  .rsocketConnector(connector -> connector.acceptor(handler.responder()))
+  .tcp("localhost", 7000);
+  //
+RSocketRequester requester = RSocketRequester.builder()
+  .rsocketConnector(connector ->
+  }).tcp("localhost",7000);
+
+  //
+@ConnectMapping
+  Mono<Void> handle(RSocketRequester requester){
+  requester.route("status").data("5")
+  .retrieveFlux(StatusReport.class)
+  .subscribe(bar ->{
+    
+  });
+return ...
+  }
+//
+  ViewBox viewBox = ...;
+
+Flux<AirportLocation>locations = requester.route("locate.radars.within")
+  .data(viewBox)
+  .retrieveFlux(AirportLocation.class);
+//
+Mono<AirportLocation>location = requester.route("find.radars.EWR"))
+.retrieveMono(AirportLocation.class);
+//
+String securityToken = ...;
+ViewBox viewBox = ...;
+MimeType mimeType = MimeType.valueOf("message/x.rsocket.authetication.bearer.v0");
+
+Flux<AirportLocation> locations = requester.route("locate.radars.within")
+  .metadata(securityToken, mimeType)
+  .data(viewBox)
+  .retriveFlux(AirportLocation.class);
+//
+@Configuration
+  static class ServerConfig{
+
+    @Bean
+    public RSocketMessageHandler rsocketMessageHandler(){
+      RSocketMessageHandler handler = new RSocketMessageHandler();
+      handler.routeMatcher(new PathPatternRouteMatcher());
+      return handler;
+    }
+  }
+//
+
+ApplicationContext context = ..;
+RSocketMessagerHandler handler = context.getBean(RSocketMessageHandler.class);
+
+CloseableChannel server = 
+  RSocketServer.create(handler.responder())
+  .bind(TcpServerTransport.create("localhost", 7000))
+  .block();
+//
+@Configuration
+  static class ServerConfig
+  {
+    @Bean
+    public RSocketMessageHandler rsocketMessageHandler(){
+      RSocketMessageHandler handler = new RSocketMessageHandler();
+      handler.setRSocketStragies(rsocketStrategies());
+      return handler;
+    }
+
+    @Bean
+    public RSocketStrategies rsocketStrategies(){
+      return RSocketStragies.builder()
+        .encoders(encoders -> encoders.add(new Jackson2CborEncoder()))
+        .decoders(decoders -> decoders.add(new Jackson2CborDecoder()))
+        .routeMatcher(new PathPatternRouteMatcher())
+    .build();
+        
+        }
+  }
+//
+@Controller
+  public class RadarController{
+
+    @MessageMapping("locate.radars.within")
+    public Flux<AirportLocation> radar(MapRequest request){
+      
+    }
+  }
+//
+DefaultMetadataExtractor extractor = new DefaultMetadataExtractor(metadataDecoders);
+extractor.metadataToExtract(fooMimeType, Foo.class, "foo");
+//
+DefaultMetadataExtractor extractor = new DefaultMetadataExtractor(metadataDecoders);
+extractor.metadataToExtract(
+  
+MimeType.valueOf("application/vnd.myapp.metadata+json"),
+new ParameterizedTypeReference<Map<String, String>>() {},
+  (jsonMap, outputMap) ->
+  outputMap.putAll(jsonMap);
+});
+  //
+
+RSocketStrategies strategies = RSocketStragies.builder()
+  .metadataExtractorRegistry(registry -> {
+    registry.metadataToExtract(fooMimeType, Foo.class, "foo");
+  })
+  .build();
+
+  //
+  interface RadarService {
+
+    @RSocketExchange("radars")
+    Flux<AirportLocation> getRadars(@Payload MapRequest request);
+
+  }
+  // 6.7. Reactive Libraries 1279
+
+  RestTemplate template = new RestTemplate();
+
+HttpComponentsClientHttpRequestFactory());
+//
+String result = resultTemplate.getForObject(
+  "http://example.com/hotels/{hotel}/bookings/{booking}", String.class,"42",
+"21");
+//
+restTemplate.getForObject("https://example.com/hotel list", String.class);
+
+
+//
+String uriTemplate = "https://example.com/hotels/{hotel}";
+URI uri = UriComponentsBuilder.fromUriString(uriTemplate).build(42);
+
+RequestEntity<Void> requestEntity = RequestEntity.get(uri)
+  .header("MyRequestHeader", "MyValue")
+  .build();
+
+ResponseEntity<String> response = template.exchange(requestEntity, String.class);
+
+String responseHeader = response.getHeaders().getFirst("MyResponseHeader");
+String body = response.getBody();
+//
+
+MappingJacksonValue value = new MappingJacksonValue(new User("eric", "7!jd#h23"));
+value.setSerializationView(User.WithoutPasswordView.class);
+
+RequestEntity<MappingJacksonValue> requestEntity = 
+  RequestEntity.post(new URI("https://example.com/users")).body(value);
+
+ResponseEntity<String> response = template.exchange(requestEntity, String.class);
+
+//
+MultiValueMap<String, Object> parts = new LinkedMultiValueMap<>();
+
+parts.add("fieldPart", "fieldValue");
+parts.add("fieldPart", new FileSystemResource("...logo.png"));
+parts.add("fieldPart", new Person("Jason"));
+
+HttpHeaders headers = new HttpHeaders();
+headers.setContentType(MediaType.APPLICATION_XML);
+parts.add("xmlPart", new HttpEntity<>(myBean,headers));
+//
+MultiValueMap<String, Object> parts = ...;
+template.postForObject("https://example.com/upload", parts, Void.class);
+
+//
+  interface RepositoryService {
+
+    @GetExchange("/repos/{owner}/{repo}")
+
+    Repository getRepository(@PathVariable String owner, @PathVariable String repo);
+
+  }
+
+  //
+  WebClient client = WebClient.builder().baseUrl("https://api.github.com").build();
+  HttpServiceProxyFactory factory = HttpServiceProxyFactory.builder(WebClientAdapter.forClient(client)).build();
+
+  RepositoryService service = factory.createClient(RepositoryService.class);
+
+  //
+  @HttpExchange(url = "/repos/{owner}/{repo}", accept = "application/vnd.github.v3+json")
+
+  interface RepositoryService {
+
+    @GetExchange
+    Repository getRepository(@PathVariable String owner, @PathVariable String repo);
+
+    @PatchExchange(contentType = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    void updateRepository(@PathVariable String owner, @PathVariable String repo, @RequestBody String name,
+        @RequestParam String description, @RequestParam String homepage);
+
+  }
+
+  //
+WebClient webClient = WebClient.builder().defaultStatusHandler(HttpStatusCode::isError, resp -> ...)
+.build();
+
+  WebClientAdapter client Adapter=WebClientAdapter.forClient(webClient);
+  HttpServiceProxyFactory factory = HttpServiceProxyFactory.builder(clientAdapter).build();
+  //
+  ConnectionFactory->Connection->Session->MessageProducer->send
+  //
+
+  public class JmsQueueSender {
+
+    private JmsTemplate jmsTemplate;
+    private Queue queue;
+
+    public void setConnectionFactory(ConnectionFactoy cf) {
+      this.jmsTemplate = new JmsTemplate(cf);
+    }
+
+    public void setQueue(Queue queue) {
+      this.queue = queue;
+    }
+
+    public void simpleSend() {
+
+      this.jmsTemplate.send(this.queue, new MessageCreator() {
+        public Message createMessage(Session session) throws JMSException {
+          return session.createTextMessage("Hello World");
+        }
+      });
+    }
+  }//
+
+  public void sendWithconversion() {
+    Map map = new HashMap();
+    map.put("Name", "Mark");
+    map.put("Age", new Integer(47));
+    jmsTemplate.convertAndSend("testQueue", map, new MessagePostProcessor() {
+      public Message postProcessMessage(Message message) throws JMSException {
+        message.setIntProperty("AccountID", 1234);
+        message.setJMSCorrelationID("123-00001");
+        return message;
+      }
+
+    });
+
+  }MapMessage={
+  Header={
+  ...standart headers ...
+  CorrelationID={123-00001}
+  
+  }
+  Properties={
+    AccountID = {Integer:1234}
+  }
+Fields={
+  Name={String:Mark}
+  Age={Integer:47}
+}
+}
+
+  //
+  public class ExampleListener implements MessageListener {
+
+    public void onMessage(Message message) {
+      if (message instanceof TextMessage textMessage) {
+        try {
+          System.out.println(textMessage.getText());
+        } catch (JMSException ex) {
+          throw new RuntimeException(ex);
+        }
+      } else {
+        throw new IllegalArgumentException("Message must be of type Textmessage");
+      }
+    }
+  }
+
+  //
+  public interface SessionAwareMessageListener {
+
+    void onMessage(Message message, Session session) throws JMSException;
+
+  }
+
+  //
+  public interface MesssageDelegate {
+
+    void handleMessage(String message);
+
+    void handleMessage(Map message);
+
+    void handleMessage(byte[] message);
+
+    void handleMessage(Serializable message);
+  }
+
+  //
+  public class DefaultMessageDelegate
+  implement MessageDelegate
+  {
+
+    }
+
+    //
+    public interface TextMessageDelegate {
+
+      void receive(TextMessage message);
+    }
+
+    //
+    public class DefaultTextMessageDelegate implements TextMessageDelegate {
+
+    }/
+
+    //
+    public interface ResponseTextMessageDelegate {
+
+      String receive(TextMessage message);
+    }
+
+    public class DefaultResponseTextMessageDelegate implements ResponseTextMessageDelegate {
+
+    }
+
+    //
+    @Conponent
+    public class MyService {
+
+    @JmsListener(destination = "myDestination")
+  
+  public void processOrder(String data){...}
+    }
+
+    //
+@Configuration
+  @EnableJms
+  public classs AppConfig{
+
+    @Bean
+    public DefaultJmsListenerContainerFactory jmsLinstenerContainerFactory() {
+
+      DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
+
+      factory.setConnectionFactory(connectionFactory());
+      factory.setDestinationResolver(destinationResolver());
+      factory.setSessionTransacted(true);
+      factory.setConcurrentency("3-10");
+      return factory;
+    }
+  }
+
+  //
+  @Configuration
+  @EnableJms
+  public class AppConfig implements jmsListenerConfigurer {
+
+    @Override
+    public void configureJmsListener(JmsListenerEndpointRegistrar registrar) {
+      SimpleJmsListenerEndpoint endpoint = new SimpleJmsListenerEndpoint();
+
+      endpoint.setId("myJmsEndpoint");
+      endpoint.setDestination("anotherQueue");
+      endpoint.setMessageListener(messsage -> {
+
+      });
+      registrar.registerEndpoint(endpoint);
+    }
+  }
+
+  //
+  @Component
+  public class MyService {
+
+    @JmsListener(destination = "myDestination")
+    public void processOrder(Order order, @Header("order_type") String orderType) {
+
+    }
+  }
+  //
+
+@JmsListener(destination = "myDestination")
+  public void processOrder(Message<Order>order){...}
+
+  //
+  @Configuration
+  @EnableJms
+  public class AppConfig implements jmsListenerConfigurer {
+
+    @Override
+    public void configureJmsListener(JmsListenerEndpointRegistrar registrar) {
+      registrar.setMessageHandlerMethodFactory(myJmsHandlerMethodFactory());
+    }
+
+    @Bean
+    public DefaultMessageHandlerMethodFactory myHandlerMethodFactory() {
+      DefaultMessageHandlerMethodFactory factory = new DefaultMessageHandlerMethodFactory();
+      factory.setValidator(myValidator());
+      return factory;
+    }
+}
+
+//
+@JmsListener(destination = "myDestination")
+  @SendTo("status")
+  public OrderStatus processOrder(Order order){
+  return status;
+  }
+//
+@JmsListener(destinations = "myDestination")
+  @SendTo("status")
+  public Message<OrderStatus> processOrder(Order order){
+
+  return MessageBuilder
+  .withPayload(status)
+  .setHeader("code", 1234)
+  .build();
+
+  }
+//
+@JmsListener(destination = "myDestination")
+  public JmsResponse<Message<OrderStatus>>processOrder(Order order){
+
+  Messsage<OrderStatus>response = MessageBuilder
+  .withPayload(status)
+  .setHeaders("code", 1234)
+  .build();
+
+return JmsResponse.forQueue(response,"status");
+  }
+//
+
+@Configuration
+  @EnableJms
+  public class AppConfig{
+
+    @Bean
+    public DefaultJmsListenerContainerFactory jmsLinstenerContainerFactory(){
+      DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
+
+      factory.setConnectionFactory(connectionFactory());
+      QosSettings replyQosSettings = new QosSettings();
+      replyQosSettings.setPriority(2);
+      replyQosSettings.setTimeLive(10000);
+      factory.setReplyQosSettings(replyQosSettings);
+      return factory;
+    }
+  }
+//
+public class JmlTestBean implement IJmxTestBeab{
+
+  private String name;
+  private int age;
+  private boolean isSuperman;
+
+  public int getAge(){
+    return age;
+  }
+
+  public void setAge(int age){
+    this.age = age;
+  }
+
+public void setName(String name ){
+  this.name = name;
+
+}
+
+public String getName(){
+  return name;
+}
+
+public int add(int x, int y){
+  return x+ y;
+}
+public void dontExposeMe(){
+  throw new RuntimeException();
+}
+}
+//
+
+@ManagedResource(
+    objectName = "bean:name=testBean4",
+    description = "My Managed Bean",
+  log = true,
+  logFile = "test.log",
+
+
+)
